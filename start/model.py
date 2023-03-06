@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from wxcloudrun import db
+from start import db
 
 
 # 计数表
