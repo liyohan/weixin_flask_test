@@ -6,7 +6,7 @@ from start.model import Counters
 from start.response import make_succ_empty_response, make_succ_response, make_err_response
 
 from urllib import parse
-from start import token_decode
+from start.middlewares import token_decode
 import logging
 import time
 import config
