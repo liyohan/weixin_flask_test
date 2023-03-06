@@ -80,7 +80,7 @@ def login():
     """
     logger.info('获取授权地址')
     # 返回获取access_token地址
-    REDIRECT_URI = parse.quote(f'http://{request.host}:80/wx/get_access_token/')
+    REDIRECT_URI = parse.quote(f'https://{request.host}/user/get_access_token/')
     url = f'https://open.weixin.qq.com/connect/oauth2/authorize?appid={config.app_id}&redirect_uri={REDIRECT_URI}&response_type=code&scope={config.scope}&state=1&#wechat_redirect'
     logger.debug(url)
 
@@ -116,7 +116,7 @@ def before_request():
 
     try:
         # 获取token数据
-        if str(request.url_rule) in ['/wx/', '/wx/get_access_token/', '/favicon.ico']:
+        if str(request.url_rule) in ['/wx/', '/user/get_access_token/', '/favicon.ico']:
             # 当符合条件时忽略
             pass
         elif token:
