@@ -53,9 +53,9 @@ def get_access_token():
     """
     获取授权用户信息
     """
-    logger.info('获取授权用户信息')
+    logger.error('获取授权用户信息')
     code = request.args.get('code')
-    logger.debug(code)
+    logger.error(code)
 
     # 获取用户access token
     url = f'https://api.weixin.qq.com/sns/oauth2/access_token?appid={config.app_id}&secret={config.app_secret}&code={code}&grant_type=authorization_code'
@@ -66,9 +66,9 @@ def get_access_token():
 
         user_data = Users.query.filter(Users.openid == open_id).first()
         # user_data = operation_db(f'select * from user where open_id="{open_id}"')
-        logger.debug(user_data)
+        logger.error(user_data)
         if user_data:
-            logger.info(f'用户: {open_id} 已注册，将重新授权')
+            logger.error(f'用户: {open_id} 已注册，将重新授权')
             # 若用户已经注册过，则只需要重新赋予token即可
             access_token_time = (int(time.time()) + expires_in) * 1000
 
@@ -77,11 +77,11 @@ def get_access_token():
             # logger.debug(f'用户: {open_id} 表数据已更新')
 
         else:
-            logger.info(f'用户: {open_id} 首次注册')
+            logger.error(f'用户: {open_id} 首次注册')
 
             # 首次授权时才会写入数据库中
             # 请求微信服务器获取用户信息
-            logger.debug(f'获取用户信息 acces_token: {access_token} open_id: {open_id}')
+            logger.error(f'获取用户信息 acces_token: {access_token} open_id: {open_id}')
             user_data = get_user_info(access_token, open_id)
 
             # 计算过期时间
@@ -106,7 +106,7 @@ def get_access_token():
                 db.session.add(users)
                 db.session.commit()
             except OperationalError as e:
-                logger.info("insert_counter errorMsg= {} ".format(e))
+                logger.error("insert_counter errorMsg= {} ".format(e))
 
             # db = get_db().cursor()
             # db.execute('replace INTO user_token (open_id,access_token,access_token_time,refresh_token,refresh_token_time) '

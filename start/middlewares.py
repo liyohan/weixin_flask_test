@@ -2,6 +2,10 @@
 # token加密解密
 import jwt
 import time
+import config
+import logging
+logger = logging.getLogger('log')
+
 
 
 def token_encode(open_id, access_token, expires_in):
@@ -40,6 +44,6 @@ def token_decode(token):
     try:
         jwt_decode = jwt.decode(token, config.token_user, issuer=config.issuer, algorithms=['HS256'])
     except:
-        print('解析token失败')
+        logger.error('解析token失败')
     finally:
         return jwt_decode

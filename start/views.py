@@ -78,11 +78,11 @@ def login():
     """
     拼接授权url地址
     """
-    logger.info('获取授权地址')
+    logger.error('获取授权地址')
     # 返回获取access_token地址
     REDIRECT_URI = parse.quote(f'https://{request.host}/user/get_access_token/')
     url = f'https://open.weixin.qq.com/connect/oauth2/authorize?appid={config.app_id}&redirect_uri={REDIRECT_URI}&response_type=code&scope={config.scope}&state=1&#wechat_redirect'
-    logger.debug(url)
+    logger.error(url)
 
     return url
 
@@ -109,10 +109,10 @@ def before_request():
     :return:
     """
 
-    logger.debug('进入中间件判断')
+    logger.error('进入中间件判断')
     token = request.headers.get('token')
-    logger.debug(f'token: {token}')
-    logger.debug(f'uri: {request.url_rule}')
+    logger.error(f'token: {token}')
+    logger.error(f'uri: {request.url_rule}')
 
     try:
         # 获取token数据
@@ -127,13 +127,13 @@ def before_request():
             elif int(time.time()) >= jwt_decode.get('exp'):  # 解析token成功时间超时
                 raise Exception('token超时')
             else:
-                logger.info(f'openid:[{jwt_decode.get("data").get("open_id")}] 访问:[{request.url_rule}]')
+                logger.error(f'openid:[{jwt_decode.get("data").get("open_id")}] 访问:[{request.url_rule}]')
         else:
             raise Exception('登陆token为空，请重新登陆')
 
     except Exception as e:
         logger.error(f'异常: {e}')
-        logger.info(f'重新授权登陆')
+        logger.error(f'重新授权登陆')
         # 当token不存在的时候重定向到授权页面
         # 当token超时时重新授权登陆
         res = redirect(login())
