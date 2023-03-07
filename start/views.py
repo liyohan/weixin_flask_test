@@ -80,7 +80,7 @@ def login():
     """
     logger.error('获取授权地址')
     # 返回获取access_token地址
-    REDIRECT_URI = parse.quote(f'https://{request.host}/user/get_access_token/')
+    REDIRECT_URI = parse.quote_plus(f'https://{request.host}/user/get_access_token/')
     url = f'https://open.weixin.qq.com/connect/oauth2/authorize?appid={config.app_id}&redirect_uri={REDIRECT_URI}&response_type=code&scope={config.scope}&state=1&#wechat_redirect'
     logger.error(url)
 
@@ -89,7 +89,7 @@ def login():
 
 @app.route('/home/')
 def home():
-    logger.info('进入主页')
+    logger.error('进入主页')
     res = make_response(render_template('home.html',
                                         open_url=login(),
                                         user_url=f'/wx/get_all_user/',
