@@ -99,43 +99,43 @@ def home():
 
 
 
-@app.before_request
-def before_request():
-    """
-    每次访问前判断
-    1.用户是否带有token
-    2.token解析是否正常，异常或超出时间限制时
-    3.若不存在则进入授权界面，并赋予token
-    :return:
-    """
-
-    logger.error('进入中间件判断')
-    token = request.headers.get('token')
-    logger.error(f'token: {token}')
-    logger.error(f'uri: {request.url_rule}')
-
-    try:
-        # 获取token数据
-        if str(request.url_rule) in ['/wx/', '/user/get_access_token/', '/favicon.ico']:
-            # 当符合条件时忽略
-            pass
-        elif token:
-
-            jwt_decode = token_decode(token)
-            if not jwt_decode:  # 解析token失败
-                raise Exception('token解析失败')
-            elif int(time.time()) >= jwt_decode.get('exp'):  # 解析token成功时间超时
-                raise Exception('token超时')
-            else:
-                logger.error(f'openid:[{jwt_decode.get("data").get("open_id")}] 访问:[{request.url_rule}]')
-        else:
-            raise Exception('登陆token为空，请重新登陆')
-
-    except Exception as e:
-        logger.error(f'异常: {e}')
-        logger.error(f'重新授权登陆')
-        # 当token不存在的时候重定向到授权页面
-        # 当token超时时重新授权登陆
-        res = redirect(login())
-        res.headers['Content-Type'] = 'url'
-        return res
+# @app.before_request
+# def before_request():
+#     """
+#     每次访问前判断
+#     1.用户是否带有token
+#     2.token解析是否正常，异常或超出时间限制时
+#     3.若不存在则进入授权界面，并赋予token
+#     :return:
+#     """
+#
+#     logger.error('进入中间件判断')
+#     token = request.headers.get('token')
+#     logger.error(f'token: {token}')
+#     logger.error(f'uri: {request.url_rule}')
+#
+#     try:
+#         # 获取token数据
+#         if str(request.url_rule) in ['/wx/', '/user/get_access_token/', '/favicon.ico']:
+#             # 当符合条件时忽略
+#             pass
+#         elif token:
+#
+#             jwt_decode = token_decode(token)
+#             if not jwt_decode:  # 解析token失败
+#                 raise Exception('token解析失败')
+#             elif int(time.time()) >= jwt_decode.get('exp'):  # 解析token成功时间超时
+#                 raise Exception('token超时')
+#             else:
+#                 logger.error(f'openid:[{jwt_decode.get("data").get("open_id")}] 访问:[{request.url_rule}]')
+#         else:
+#             raise Exception('登陆token为空，请重新登陆')
+#
+#     except Exception as e:
+#         logger.error(f'异常: {e}')
+#         logger.error(f'重新授权登陆')
+#         # 当token不存在的时候重定向到授权页面
+#         # 当token超时时重新授权登陆
+#         res = redirect(login())
+#         res.headers['Content-Type'] = 'url'
+#         return res

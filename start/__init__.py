@@ -24,5 +24,7 @@ from start import views
 app.config.from_object('config')
 
 from user import user_app
+from buys import work_app
 app.register_blueprint(user_app)
+app.register_blueprint(work_app)
 
