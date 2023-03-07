@@ -4,7 +4,7 @@ from flask import Blueprint
 # 加载蓝图
 work_app = Blueprint('work', __name__, url_prefix='/work')
 
-from buys.model import Works
+from start.model import Works
 from start import db
 
 import time
