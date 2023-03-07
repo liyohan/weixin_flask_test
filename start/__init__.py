@@ -23,3 +23,6 @@ from start import views
 # 加载配置
 app.config.from_object('config')
 
+from start.buys.views import work_app
+app.register_blueprint(work_app)
+
