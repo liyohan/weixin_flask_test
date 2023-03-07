@@ -2,18 +2,21 @@ import logging
 import requests
 import config
 import time
+from flask import Blueprint
+
+# 加载蓝图
 
 from flask import request, make_response, render_template
 from user.model import Users
 from start.response import make_succ_empty_response, make_succ_response, make_err_response
 from sqlalchemy.exc import OperationalError
 
-from user import user_app
 from start import db
 from start.views import login
 from start.middlewares import token_encode
 
 logger = logging.getLogger('log')
+user_app = Blueprint('user', __name__, url_prefix='/user')
 
 
 @user_app.route('/')
